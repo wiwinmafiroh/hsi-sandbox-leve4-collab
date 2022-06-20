@@ -125,3 +125,72 @@ def insert_nilaiexam(request):
     
     context = {'status': True}
     return JsonResponse(context, safe=False)
+
+def arsipniai_client(request):
+
+    context={}
+    # try:
+    if request.method == 'POST':
+      data = json.loads(request.body)
+      peserta_id = data["peserta_id"]
+      # print(peserta_id)
+      hasileval = list(HasilEvaluasi.objects.filter(peserta=peserta_id).values())
+      # print(hasileval)
+      # pilihan_a = HasilEvaluasi.objects.filter(peserta=peserta_id).values("bank_soal__pilihan_a")
+      # print(pilihan_a)
+      # hasileval = list(HasilEvaluasi.objects.select_related('Peserta', 'BankSoal').filter(peserta=peserta_id).values())
+      # print("hasil eval niiih"+hasileval.query)      
+
+      id_soal = []
+      pertanyaan = []
+      kj = []
+      textkj = []
+      duasoal = []
+      textj = []
+      for i in range(2):
+          
+          id_soal.append(hasileval[i].get("bank_soal_id"))
+          # print(id_soal)
+          jawaban = hasileval[i].get("jawaban")
+          textjawaban = list(HasilEvaluasi.objects.filter(bank_soal_id=id_soal[i]).values("bank_soal__pilihan_"+jawaban.lower()))
+          textj.append(textjawaban)
+          # print("pilihan aaaa = "+hasileval[i].va("bank_soal__pilihan_a"))
+          # valuessoal = list(BankSoal.objects.filter(id=id_soal[i]).values())
+          soal = BankSoal.objects.get(id=id_soal[i])
+          # duasoal.append(valuessoal)
+          # print(duasoal)
+          pertanyaan.append(soal.pertanyaan)
+          kj.append(soal.kunci_jawaban)
+          if kj[i] == "A":
+            textkj.append(soal.pilihan_a)
+          elif kj[i] == "B":
+            textkj.append(soal.pilihan_b)
+          elif kj[i] == "C":
+            textkj.append(soal.pilihan_c)
+            # print("ini jawaban C :"+soal.pilihan_c)
+          elif kj[i] == "D":
+            textkj.append(soal.pilihan_d)
+
+      if not hasileval:
+          context={
+              'is_exam':0,
+              'message':"\nAnda belum mengerjakan EH 1\n",
+          }   
+      else:
+          context={
+              'pertanyaan':pertanyaan,
+              'kunci_jawaban':kj,
+              'textkj':textkj,
+              'textjawaban':textj,
+              'is_exam':1,
+              'hasileval':hasileval,
+              'duasoal':duasoal,
+              'message':("\nAnda telah mengerjakan EH 1\n"),
+          }
+    # except:
+    #     context={
+    #         'is_exam':0,
+    #         'message':"\nAnda belum mengerjakan EH 1\n",
+    #     }
+
+    return JsonResponse(context, safe=False)
