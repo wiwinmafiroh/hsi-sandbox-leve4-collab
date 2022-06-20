@@ -148,15 +148,22 @@ def arsipniai_client(request):
       duasoal = []
       textj = []
       for i in range(2):
-          
           id_soal.append(hasileval[i].get("bank_soal_id"))
+          soal = BankSoal.objects.get(id=id_soal[i])
           # print(id_soal)
           jawaban = hasileval[i].get("jawaban")
-          textjawaban = list(HasilEvaluasi.objects.filter(bank_soal_id=id_soal[i]).values("bank_soal__pilihan_"+jawaban.lower()))
+          # Ambil text jawaban berdasarkan jawaban
+          if jawaban == "A":
+              textjawaban = soal.pilihan_a
+          elif jawaban == "B":
+              textjawaban = soal.pilihan_b
+          elif jawaban == "C":
+              textjawaban = soal.pilihan_c
+          elif jawaban == "D":
+              textjawaban = soal.pilihan_d
           textj.append(textjawaban)
           # print("pilihan aaaa = "+hasileval[i].va("bank_soal__pilihan_a"))
           # valuessoal = list(BankSoal.objects.filter(id=id_soal[i]).values())
-          soal = BankSoal.objects.get(id=id_soal[i])
           # duasoal.append(valuessoal)
           # print(duasoal)
           pertanyaan.append(soal.pertanyaan)
@@ -187,6 +194,7 @@ def arsipniai_client(request):
               'duasoal':duasoal,
               'message':("\nAnda telah mengerjakan EH 1\n"),
           }
+          
     # except:
     #     context={
     #         'is_exam':0,
