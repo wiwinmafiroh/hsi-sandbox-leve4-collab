@@ -57,8 +57,8 @@ def evaluasi_harian():
 
 def input_login():
   ##### LOGIN #####
-  username = input('Masukkan NIP: ').upper()
-  password = pwinput("Masukkan Password: ")
+  username = input('\n  Masukkan NIP : ').upper()
+  password = pwinput("  Masukkan Password : ")
   login(username, password)
 
 def login(username, password):
@@ -73,11 +73,12 @@ def login(username, password):
   if res['status'] == True:
     peserta_id = res['peserta']['id']
     peserta_nama_lengkap = res['peserta']['nama_lengkap']
-    print("Login Berhasil!")
-    print("Selamat Datang, {}\n".format(peserta_nama_lengkap))
+    print("\n{}Login Berhasil!".format(" " * 2))
+    print("\n{}Selamat Datang , {} , di HSI Sandbox".format(" " * 2, peserta_nama_lengkap))
+    time.sleep(2)
     
   else:
-    print("NIP atau Password Salah!\n")
+    print("{}NIP atau Password Salah!\n".format(" " * 2))
     input_login()
 
 def check_evaluasi(peserta_id):
@@ -88,22 +89,26 @@ def check_evaluasi(peserta_id):
   # print(res)
   
   if res['status'] == False:
-    print("SI000.EHO01")
-    print("-----------------------------------------------------------------------")
-    print("Jumlah Soal: 2")
-    print("-----------------------------------------------------------------------")
-    print("Lembar evaluasi sudah siap!\n")
+    print("\n{}HSI Sandbox, {}\n".format(" " * 2, peserta_nama_lengkap))
+    print("{}SI000.EHO01".format(" " * 2))
+    print("{}-----------------------------------------------------------------------".format(" " * 2))
+    print("{}Jumlah Soal: 2")
+    print("{}-----------------------------------------------------------------------".format(" " * 2))
+    print("{}Lembar evaluasi sudah siap!\n".format(" " * 2))
     
-    pilih_kerjakan = input("Kerjakan (y/n)? ")
+    pilih_kerjakan = input("{}Kerjakan (y/n)? ".format(" " * 2))
     
     if pilih_kerjakan.lower() == "n":
-      exit()
+      pilihan_menu()
       
     print(" ")
     
   else:
-    print("Evaluasi Harian Sudah Dikerjakan!")
-    exit()
+    print("\n{}HSI Sandbox, {}\n".format(" " * 2, peserta_nama_lengkap))
+    time.sleep(2)
+    print("\n{}Evaluasi Harian Sudah Dikerjakan!".format(" " * 2))
+    time.sleep(2)
+    pilihan_menu()
     
 def check_jawaban(banksoal_id, jawaban_user):
   global status, nilai
@@ -147,30 +152,29 @@ def insert_nilaiexam(peserta, total_nilai):
   r = requests.post(url, json=payload)
 
 def nilai_akhir(nilai_akhir):
-  print("----------------- Evaluasi Harian Selesai ----------------------------")
-  print("Total Nilai Anda: {}".format(nilai_akhir))
-  print("----------------- Tetap Semangat, dan Terus Belajar! -----------------")
+  print("\n{}----------------- Evaluasi Harian Selesai ----------------------------".format(" " * 2))
+  print("\n  Total Nilai Anda: {}".format(nilai_akhir))
+  print("\n{}----------------- Tetap Semangat, dan Terus Belajar! -----------------".format(" " * 2))
   
 def arsipnilai_client(peserta_id):
     # print(nip + " / " +peserta_nama_lengkap)
-    print(" / " +peserta_nama_lengkap)
+    print("\n{}HSI Sandbox / {} ".format(" " * 2, peserta_nama_lengkap))
     
     url_arsipniai_client = 'http://localhost:8000/arsipniai_client'
     param_arsipnilai_c = {'peserta_id':peserta_id}
     r_arsipnilai_c = requests.post(url_arsipniai_client, json=param_arsipnilai_c)
     json_arsipnilai_c = json.loads(r_arsipnilai_c.text)
-    print(json_arsipnilai_c.get("message"))
+    print("{} {}".format(" " * 2, json_arsipnilai_c.get("message")))
 
     if json_arsipnilai_c.get("is_exam") == 1:
         time.sleep(1)
-        print("\n------------------------------------------------")
-        print("\n--------ARSIP NILAI EVALUASI HARIAN KE-1--------\n")
-        print("------------------------------------------------")
+
+        print("\n{}------------------------------------------------".format(" " * 2))
+        print("\n{}--------ARSIP NILAI EVALUASI HARIAN KE-1--------".format(" " * 2))
+        print("\n{}------------------------------------------------".format(" " * 2))
         time.sleep(1)
         
         hasileval = json_arsipnilai_c.get("hasileval")
-        # duasoal = json_arsipnilai_c.get("duasoal")
-        # duasoal = duasoal[0]
         pertanyaan = json_arsipnilai_c.get("pertanyaan")
         kj = json_arsipnilai_c.get("kunci_jawaban")
         textkj = json_arsipnilai_c.get("textkj")
@@ -178,62 +182,58 @@ def arsipnilai_client(peserta_id):
 
         for a in range(2):
 
-            # soal = duasoal[a]
-            # pilihan_a = soal.get("pilihan_a")
-            # print(pilihan_a)
-            
-            # pilihan_c = soal.get("pilihan_a")
-            # print(pilihan_c)
-
             arsipnilai = hasileval[a]
             jwb = arsipnilai.get("jawaban")
-            # if jwb == "C":
-            #   txt = pilihan_c
-            # txt = arsipnilai.get("textjawaban")
             stt = arsipnilai.get("status")
-            # soalcoba = arsipnilai.get("pertanyaan")
-            # print("nyoba dulu yaaa " +str(soalcoba))
-
             
-            print(f"\n{a+1}. {pertanyaan[a]} \n Jawaban anda : {jwb.lower()}. {textjawaban[a]} --> {stt}")
-            if stt == "SALAH":
-                print(f"\n Jawaban yang benar adalah : {kj[a].lower()}. {textkj[a]}")
-            # print("\Nilai : "+str(hasileval[a].get("nilai"))+"\n")
-            print("\n----------------------------------------------------")
+            print(f"\n  {a+1}. {pertanyaan[a]} ")
+            print(f"\n  Jawaban anda : \n  {jwb.lower()}. {textjawaban[a]}")
+            print(f"  --> {stt}")
+            if stt == "Salah":
+                print("\n{}Jawaban yang benar : \n  {}. {}".format(" " * 2, kj[a].lower(), textkj[a]))
+            print("\n{}----------------------------------------------------".format(" " * 2))
                 
-        print("\nTotal Nilai : "+str(hasileval[0].get("nilai")+hasileval[1].get("nilai"))+"\n")
+        print("\n  Total Nilai : "+str(hasileval[0].get("nilai")+hasileval[1].get("nilai"))+"\n")
+        print("\n{}----------------- Tetap Semangat, dan Terus Belajar! -----------------".format(" " * 2))
     
     # proses()
     time.sleep(2)
 
-# evaluasi_harian()
+def peringkat():
+  print("peringkat")
+
 def pilihan_menu():
     
     os.system("cls")
-    # print(pesanlogin)
+    print("\n{}HSI Sandbox, {}\n".format(" " * 2, peserta_nama_lengkap))
+
     while True:
-        print("\nPilihan Menu : \n")
-        print("1. Evaluasi\n2. Arsip Nilai\n3. Keluar")
+        print("\n{}Pilihan Menu : \n".format(" " * 2))
+        print("\n{}1. Evaluasi\n{}2. Arsip Nilai\n{}3. Peringkat\n{}4. Keluar".format(" " * 2, " " * 2, " " * 2, " " * 2))
         time.sleep(1)
-        menu = input("\nMasukkan pilihan menu anda (1/2/3) : ")
+        menu = input("\n{}Masukkan pilihan menu anda (1/2/3/4) : ".format(" " * 2))
         if menu == "1":
             os.system("cls")
-            # check_isexam()
-            # menu_evaluasi()
+            evaluasi_harian()
         elif menu == "2":
             os.system("cls")
             arsipnilai_client(peserta_id)
             print("\n")
         elif menu == "3":
-            print("\n--------- Terimakasih telah mengakses aplikasi ini ---------")
+            peringkat()
+        elif menu == "4":
+            print("\n{}--------- Terimakasih telah mengakses aplikasi ini ---------".format(" " * 2))
             time.sleep(1)
             quit()
         else:
-            print("\Inputan anda salah\n")
+            print("\n{}Inputan anda salah\n".format(" " * 2))
             time.sleep(1)
             pilihan_menu()
 
-# main menu()
-# login()
+# main menu
+print("\n{}--------------------------------------".format(" " * 2))
+print("\n{}    L O G I N   A P L I K A S I  H S I\n".format(" " * 2))
+print("\n{}--------------------------------------".format(" " * 2))
+
 input_login()
 pilihan_menu()
