@@ -61,6 +61,6 @@ class NilaiEvaluasi(models.Model):
   
   def __str__(self):
     return "{} - {}".format(self.peserta.nama_lengkap, self.total_nilai)
-  
+    
   class Meta:
     verbose_name_plural = "Nilai Evaluasi"
