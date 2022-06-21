@@ -19,37 +19,101 @@ def peserta_json(request):
   return JsonResponse(psq, safe=False)
 
 def banksoal_json(request):
-  bsq = list(BankSoal.objects.values())
-  bsr = random.sample(bsq, 2)
+  try : #eva
+    bsq = list(BankSoal.objects.values())
+    bsr = random.sample(bsq, 2)
+    status = True #eva 
+    context = { #eva
+      'bsr' : bsr,#eva
+      'status' : status#eva
+    }#eva
+    
+  except :#eva
+    status = False#eva
+    context = {#eva
+      'status' : status#eva
+    }#eva
   
-  return JsonResponse(bsr, safe=False)
-
+  #return JsonResponse(bsr, safe=False) #awal
+  return JsonResponse(context, safe=False)#eva
+  
 def login(request):
-  status = 'error'
-  
-  if request.method == 'POST':
-    data = json.loads(request.body)
-    username = data['username'].lower()
-    password = data['password']
+  try :
+    status = 'error'
     
-    user = authenticate(request, username=username, password=password)
-    
-    if user is not None:
-      psq = list(Peserta.objects.filter(user=user).values())
-      status = True
-      context = {
-        'peserta': psq[0], 
-        'status': status
-      }
+    if request.method == 'POST':
+      data = json.loads(request.body)
+      username = data['username'].lower()
+      password = data['password']
       
+      user = authenticate(request, username=username, password=password)
+      
+      if user is not None:
+        if user.groups.filter(name='admin') :
+          status=True
+          context = {
+            'peserta' : 'admin',
+            'status' : status
+          }
+        else :
+          psq = list(Peserta.objects.filter(user=user).values())
+          status = True
+          context = {
+            'peserta': psq[0],
+            'status' : status 
+          }
+      else:
+          context = {
+            'peserta': '',
+            'status' : False 
+          }
+      return JsonResponse(context, safe=False)
     else:
-      status = False
-      context = {'status': status}
+      context = {
+            'peserta': '',
+            'status' : False 
+          }
+      return JsonResponse(context, safe=False)
+  except :
+    context = {
+            'peserta': '',
+            'status' : False 
+          }
+    return JsonResponse(context,safe=False)
     
-    return JsonResponse(context, safe=False)
     
-  else:
-    return JsonResponse({'status': status}, safe=False)
+#eva
+def show_rank(request) :
+  try : #eva
+    rq = NilaiEvaluasi.objects.all().order_by('-total_nilai')
+    status = True #eva
+    list_rank=[]
+    for rank in rq :
+      nip= rank.peserta.nip 
+      nama_lengkap= rank.peserta.nama_lengkap 
+      total_nilai=rank.total_nilai
+      dict={
+        'nip' : nip,
+        'nama_lengkap' : nama_lengkap,
+        'total_nilai' :total_nilai
+      }
+      list_rank.append(dict)
+    
+    print(list_rank)
+    context = { #eva
+      'list_rank' : list_rank,#eva
+      'status' : status#eva
+    }#eva
+  except :#eva
+    print('masuk server error')
+    status = False#eva
+    context = {#eva
+      'status' : status#eva
+    }#eva
+
+  #return JsonResponse(bsr, safe=False) #awal
+  return JsonResponse(context, safe=False)#eva
+
 
 def check_evaluasi(request):
   if request.method == 'GET':
