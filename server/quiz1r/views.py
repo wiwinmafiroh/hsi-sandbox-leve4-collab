@@ -1,6 +1,10 @@
+from asyncio.windows_events import NULL
+from gettext import NullTranslations
+from itertools import count
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.shortcuts import render
 
 from .models import *
 
@@ -125,3 +129,28 @@ def insert_nilaiexam(request):
     
     context = {'status': True}
     return JsonResponse(context, safe=False)
+
+### Menampilkan Hasil Evaluasi (Novi) ###
+def hasil_evaluasi(request):
+  nilai = []
+  data_evaluasi = HasilEvaluasi.objects.all()
+  for eval in data_evaluasi:
+    for data_nilai in NilaiEvaluasi.objects.filter(peserta=eval.peserta):
+      nilai.append(data_nilai)
+
+  hasil_eval = list(zip(data_evaluasi, nilai))
+  
+  context = {
+    'hasil_eval': hasil_eval
+  }
+
+  return render(request, 'hasil_evaluasi.html', context)
+
+### Menampilkan Nilai Peserta Dari Yang Tertinggi (Novi) ######
+def peringkat_peserta(request):
+  data_peringkat = NilaiEvaluasi.objects.all().order_by('-total_nilai')
+  context = {
+    'data_peringkat': data_peringkat
+  }
+
+  return render(request, 'peringkat_peserta.html', context)
