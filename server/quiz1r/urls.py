@@ -13,4 +13,5 @@ urlpatterns = [
     path('insert_evaluasi', csrf_exempt(views.insert_evaluasi), name='insert_evaluasi'),
     path('insert_nilaiexam', csrf_exempt(views.insert_nilaiexam), name='insert_nilaiexam'),
     path('arsipniai_client', csrf_exempt(views.arsipniai_client), name='arsipniai_client'),
+    path('show_rank',views.show_rank, name='show_rank'),
 ]
