@@ -1,7 +1,5 @@
 import requests
 import json
-import time
-import os
 
 from pwinput import pwinput
 

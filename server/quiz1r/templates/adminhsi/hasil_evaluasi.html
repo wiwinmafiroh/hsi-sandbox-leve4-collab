@@ -1,0 +1,96 @@
+{% extends 'adminhsi/base.html' %}
+{% load static %}
+{% block title %}Admin HSI | Hasil Evaluasi{% endblock title %}
+{% block main-panel %}
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin">
+              <div class="row">
+                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                  <h3 class="font-weight-bold" style="color: #4a5c8d;">Hasil Evaluasi Peserta</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% for data in hasil_evaluasi %}
+          <div class="row" style="margin-top: -10px">
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between">
+                    <p class="card-title" style="text-transform: uppercase;">{{ data.peserta }}</p>
+                    <p class="card-title">
+                      {% for total in data.nilaieval %}
+                      EH01 - Total Skor: {{ total.total_nilai }}
+                      {% endfor %}
+                    </p>
+                  </div>
+                  {% for hasil in data.hasileval %}
+                  <div>
+                    <p class="font-weight-500" style="font-size: 1rem; margin-top: 15px;">
+                      {{ forloop.counter }}. {{hasil.bank_soal.pertanyaan}} ...
+                    </p>
+                    {% if hasil.status == 'Benar' %}
+                    <p class="font-weight-500" style="font-size: 1rem; padding-left: 1rem;">
+                      Jawaban Anda:
+                      {% if hasil.jawaban == 'A' %}
+                      A. {{ hasil.bank_soal.pilihan_a }} <i class="ti-check text-info ml-1 font-weight-bolder"></i>
+                      {% elif hasil.jawaban == 'B' %}
+                      B. {{ hasil.bank_soal.pilihan_b }} <i class="ti-check text-info ml-1 font-weight-bolder"></i>
+                      {% elif hasil.jawaban == 'C' %}
+                      C. {{ hasil.bank_soal.pilihan_c }} <i class="ti-check text-info ml-1 font-weight-bolder"></i>
+                      {% elif hasil.jawaban == 'D' %}
+                      D. {{ hasil.bank_soal.pilihan_d }} <i class="ti-check text-info ml-1 font-weight-bolder"></i>
+                      {% endif %}
+                    </p>
+                    {% elif hasil.status == 'Salah' %}
+                    <p class="font-weight-500" style="font-size: 1rem; padding-left: 1rem;">
+                      Jawaban Anda:
+                      {% if hasil.jawaban == 'A' %}
+                      A. {{ hasil.bank_soal.pilihan_a }} <i class="icon-cross text-danger ml-1 font-weight-bolder"></i>
+                      {% elif hasil.jawaban == 'B' %}
+                      B. {{ hasil.bank_soal.pilihan_b }} <i class="icon-cross text-danger ml-1 font-weight-bolder"></i>
+                      {% elif hasil.jawaban == 'C' %}
+                      C. {{ hasil.bank_soal.pilihan_c }} <i class="icon-cross text-danger ml-1 font-weight-bolder"></i>
+                      {% elif hasil.jawaban == 'D' %}
+                      D. {{ hasil.bank_soal.pilihan_d }} <i class="icon-cross text-danger ml-1 font-weight-bolder"></i>
+                      {% endif %}
+                    </p>
+                    <p class="font-weight-500" style="font-size: 1rem; padding-left: 1rem;">
+                      Jawaban Benar:
+                      {% if hasil.bank_soal.kunci_jawaban == 'A' %} 
+                      A. {{ hasil.bank_soal.pilihan_a }} <i class="ti-check text-info ml-1 font-weight-bolder"></i>
+                      {% elif hasil.bank_soal.kunci_jawaban == 'B' %} 
+                      B. {{ hasil.bank_soal.pilihan_b }} <i class="ti-check text-info ml-1 font-weight-bolder"></i>
+                      {% elif hasil.bank_soal.kunci_jawaban == 'C' %} 
+                      C. {{ hasil.bank_soal.pilihan_c }} <i class="ti-check text-info ml-1 font-weight-bolder"></i>
+                      {% elif hasil.bank_soal.kunci_jawaban == 'D' %} 
+                      D. {{ hasil.bank_soal.pilihan_d }} <i class="ti-check text-info ml-1 font-weight-bolder"></i>
+                      {% endif %}
+                    </p>
+                    {% endif %}
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021.  Premium <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from BootstrapDash. All rights reserved.</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+          </div>
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Distributed by <a href="https://www.themewagon.com/" target="_blank">Themewagon</a></span> 
+          </div>
+        </footer> 
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+{% endblock main-panel %}

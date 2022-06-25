@@ -13,5 +13,11 @@ urlpatterns = [
     path('insert_evaluasi', csrf_exempt(views.insert_evaluasi), name='insert_evaluasi'),
     path('insert_nilaiexam', csrf_exempt(views.insert_nilaiexam), name='insert_nilaiexam'),
     path('arsipniai_client', csrf_exempt(views.arsipniai_client), name='arsipniai_client'),
-    path('show_rank',views.show_rank, name='show_rank'),
+    path('show_rank',views.show_rank, name='show_rank'),#eva
+    
+    path('', views.login_web, name='login_web'),
+    path('', views.logout_web, name='logout_web'),
+    path('dashboard_web/', views.dashboard_admin, name='dashboard_web'),
+    path('hasileval_web/', views.hasil_evaluasi, name='hasileval_web'),
+    path('peringkat_web/', views.peringkat_peserta, name='peringkat_web')
 ]
