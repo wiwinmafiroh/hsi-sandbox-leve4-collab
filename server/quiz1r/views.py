@@ -1,6 +1,8 @@
 from django.http import JsonResponse
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import redirect, render
+from django.contrib import messages
 
 from .models import *
 
@@ -191,7 +193,6 @@ def insert_nilaiexam(request):
     return JsonResponse(context, safe=False)
 
 def arsipniai_client(request):
-
     context={}
     # try:
     if request.method == 'POST':
@@ -266,3 +267,83 @@ def arsipniai_client(request):
     #     }
 
     return JsonResponse(context, safe=False)
+
+# Wiwin
+def login_web(request):
+  try:
+    if request.method == 'POST':
+      username = request.POST['username'].lower()
+      password = request.POST['password']
+      
+      user = authenticate(request, username=username, password=password)
+      
+      if user is not None:
+        if user.groups.filter(name='admin'):
+          messages.success(request, 'Anda Berhasil Login!')
+          return redirect('dashboard_web')
+        else:
+          messages.success(request, 'Maaf .. Anda login sebagai Peserta, silakan akses CMD')
+          return redirect('login_web')
+      else:
+        messages.error(request, 'Username atau Password Salah!')
+        return redirect('login_web')
+  except:
+    return redirect('login_web')
+  
+  return render(request, 'login/login.html')
+
+def logout_web(request):
+  logout(request)
+  return redirect('login_web')
+
+def dashboard_admin(request):
+  username = request.user.username
+  jml_peserta = Peserta.objects.count()
+  jml_lembar_evaluasi = 1
+  jml_soal = BankSoal.objects.count()
+  jml_peserta_mengerjakan = NilaiEvaluasi.objects.count()
+  
+  context = {
+    'username': username,
+    'jml_peserta': jml_peserta,
+    'jml_lembar_evaluasi': jml_lembar_evaluasi,
+    'jml_soal': jml_soal,
+    'jml_peserta_mengerjakan': jml_peserta_mengerjakan,
+  }
+  
+  return render(request, 'adminhsi/dashboard.html', context)
+
+### Menampilkan Hasil Evaluasi (Novi) ###
+def hasil_evaluasi(request):
+  hasil_evaluasi = []
+  
+  try:    
+    psq = Peserta.objects.all()
+    
+    for p in psq:
+      hasileval = list(HasilEvaluasi.objects.filter(peserta=p.id))
+      nilaieval = list(NilaiEvaluasi.objects.filter(peserta=p.id))      
+      hasil_evaluasi.append({
+        'peserta':p,
+        'hasileval':hasileval,
+        'nilaieval':nilaieval,
+      })
+    
+    context = {
+      'hasil_evaluasi': hasil_evaluasi,
+    }
+  except:
+    context = {
+      'hasil_evaluasi': hasil_evaluasi,
+    }
+
+  return render(request, 'adminhsi/hasil_evaluasi.html', context)
+
+### Menampilkan Nilai Peserta Dari Yang Tertinggi (Novi) ######
+def peringkat_peserta(request):
+  data_peringkat = NilaiEvaluasi.objects.all().order_by('-total_nilai')
+  context = {
+    'data_peringkat': data_peringkat
+  }
+
+  return render(request, 'adminhsi/peringkat_peserta.html', context)

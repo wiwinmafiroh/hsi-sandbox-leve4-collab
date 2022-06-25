@@ -1,0 +1,94 @@
+{% extends 'adminhsi/base.html' %}
+{% load static %}
+{% block title %}Admin HSI | Dashboard{% endblock title %}
+{% block main-panel %}
+{% for message in messages %}
+<script>alert('{{ message }}')</script>
+{% endfor %}
+      <!-- partial -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin">
+              <div class="row">
+                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                  <h3 class="font-weight-bold" style="color: #4a5c8d;">Welcome {{ username }}</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 grid-margin transparent">
+              <div class="row">
+                <div class="col-md-3 mb-4 stretch-card transparent">
+                  <div class="card card-tale">
+                    <div class="card-body">
+                      <p class="mb-4">Jumlah Peserta</p>
+                      <p class="fs-30">{{ jml_peserta }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-4 stretch-card transparent">
+                  <div class="card card-dark-blue">
+                    <div class="card-body">
+                      <p class="mb-4">Jumlah Lembar Evaluasi</p>
+                      <p class="fs-30">{{ jml_lembar_evaluasi }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-4 stretch-card transparent">
+                  <div class="card card-light-blue">
+                    <div class="card-body">
+                      <p class="mb-4">Jumlah Soal</p>
+                      <p class="fs-30">{{ jml_soal }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-4 stretch-card transparent">
+                  <div class="card" style="background-color: #4a5c8d; color: white;">
+                    <div class="card-body">
+                      <p class="mb-4">Jumlah Peserta yg Mengerjakan</p>
+                      <p class="fs-30">{{ jml_peserta_mengerjakan }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+              <div class="card position-relative">
+                <div class="card-body">
+                  <div id="detailedReports" class="carousel slide detailed-report-carousel position-static pt-2" data-ride="carousel">
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <div class="row">
+                          <div class="col-md-12 col-xl-12 d-flex flex-column justify-content-start">
+                            <div class="ml-xl-4 mt-3 mb-3" style="object-fit: cover;">
+                              <h3 style="text-align: center; font-weight: bold; color: #4a5c8d;">HALAMAN ADMIN HSI</h3>
+                            </div>  
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021.  Premium <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from BootstrapDash. All rights reserved.</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+          </div>
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Distributed by <a href="https://www.themewagon.com/" target="_blank">Themewagon</a></span> 
+          </div>
+        </footer> 
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+{% endblock main-panel %}

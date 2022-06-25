@@ -4,6 +4,11 @@ import json
 from pwinput import pwinput
 
 def evaluasi_harian():
+  ##### LOGIN #####
+  username = input('Masukkan NIP: ')
+  password = pwinput("Masukkan Password: ")
+  login(username, password)
+
   ##### QUIZ #####
   # Check Evaluasi Sudah Dikerjakan/Belum
   check_evaluasi(peserta_id)
