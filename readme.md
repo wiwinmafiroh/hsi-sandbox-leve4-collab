@@ -105,6 +105,18 @@ how to install :
 ```python
   pip install -package name
 ```
+Before accessing a web or cmd application, always make sure the port is running with runserver
+  ```python
+    python manage.py runserver
+  ```
+To access the web you can open it on port 8000, click here and do control-c to close the web
+  ```python
+    Starting development server at http://127.0.0.1:8000/
+  ```
+To access the cmd app, make sure you are in the client directory, then open it with
+  ```python
+    python client_quiz1r.py
+  ```
 
 ---
 
